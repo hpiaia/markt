@@ -10,11 +10,9 @@ export class UsersService {
   /**
    * Filters and finds a user on the database.
    */
-  async find(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | null> {
+  async find(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findUnique({
-      where: userWhereUniqueInput,
+      where,
     });
   }
 

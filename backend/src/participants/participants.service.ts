@@ -5,24 +5,10 @@ import { PrismaService } from 'src/app/prisma.service';
 export class ParticipantsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll({ roomId }: { roomId: number }) {
-    return this.prisma.participant.findMany({
-      where: {
-        roomId,
-      },
-      select: {
-        joinedAt: true,
-        user: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
-  }
-
-  async findOne({ roomId, userId }: { roomId: number; userId: number }) {
+  /**
+   * Finds user within a room.
+   */
+  async find({ roomId, userId }: { roomId: number; userId: number }) {
     return this.prisma.participant.findUnique({
       where: {
         userId_roomId: {
@@ -33,6 +19,9 @@ export class ParticipantsService {
     });
   }
 
+  /**
+   * Insert a user into a room.
+   */
   async create({ roomId, userId }: { roomId: number; userId: number }) {
     return this.prisma.participant.create({
       data: {
@@ -42,6 +31,9 @@ export class ParticipantsService {
     });
   }
 
+  /**
+   * Removes a user from a room.
+   */
   async delete({ roomId, userId }: { roomId: number; userId: number }) {
     return this.prisma.participant.delete({
       where: {

@@ -2,36 +2,34 @@ import {
   BadRequestException,
   Controller,
   Delete,
-  Get,
   Param,
+  ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtGuard } from 'src/auth/jwt.guard';
 import { User } from 'src/auth/user.decorator';
 
 import { RoomsService } from '../rooms/rooms.service';
 import { ParticipantsService } from './participants.service';
 
 @Controller('participants')
+@UseGuards(JwtGuard)
 export class ParticipantsController {
   constructor(
     private readonly roomsService: RoomsService,
     private readonly participantsService: ParticipantsService,
   ) {}
 
-  @Get('/:id')
-  async index(@Param('id') roomId: string) {
-    const room = await this.roomsService.findById(Number(roomId));
-
-    if (!room) {
-      throw new BadRequestException('there is no room with this id');
-    }
-
-    return this.participantsService.findAll({ roomId: Number(roomId) });
-  }
-
+  /**
+   * Inserts the signed user into a room.
+   */
   @Post('/:id')
-  async create(@Param('id') roomId: string, @User() userId: number) {
-    const room = await this.roomsService.findById(Number(roomId));
+  async create(
+    @Param('id', ParseIntPipe) roomId: number,
+    @User() userId: number,
+  ) {
+    const room = await this.roomsService.find({ id: roomId });
 
     if (!room) {
       throw new BadRequestException('there is no room with this id');
@@ -42,7 +40,7 @@ export class ParticipantsController {
     }
 
     if (
-      await this.participantsService.findOne({
+      await this.participantsService.find({
         roomId: Number(roomId),
         userId,
       })
@@ -56,16 +54,22 @@ export class ParticipantsController {
     });
   }
 
+  /**
+   * Removes the signed user from a room.
+   */
   @Delete('/:id')
-  async delete(@Param('id') roomId: string, @User() userId: number) {
-    const room = await this.roomsService.findById(Number(roomId));
+  async delete(
+    @Param('id', ParseIntPipe) roomId: number,
+    @User() userId: number,
+  ) {
+    const room = await this.roomsService.find({ id: roomId });
 
     if (!room) {
       throw new BadRequestException('there is no room with this id');
     }
 
     if (
-      !(await this.participantsService.findOne({
+      !(await this.participantsService.find({
         roomId: Number(roomId),
         userId,
       }))

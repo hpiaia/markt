@@ -2,14 +2,18 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { JwtGuard } from './jwt.guard';
+import { User } from './user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -54,5 +58,16 @@ export class AuthController {
     );
 
     return { token };
+  }
+
+  /**
+   * Returns information about the signed in user.
+   */
+  @Get('/me')
+  @UseGuards(JwtGuard)
+  async me(@User() id: number) {
+    const { name, email } = await this.userService.find({ id });
+
+    return { id, name, email };
   }
 }
