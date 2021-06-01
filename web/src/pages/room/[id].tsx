@@ -1,22 +1,47 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Gravatar from 'react-gravatar';
 
 import { MessageBox } from '../../components/MessageBox';
 import { SendMessageInput } from '../../components/SendMessageInput';
 import { useFetch } from '../../hooks/useFetch';
+import { useIsMounted } from '../../hooks/useIsMounted';
+import { useSocket } from '../../hooks/useSocket';
 import { Message } from '../../types/Message';
 import { Room } from '../../types/Room';
 
 export default function RoomPage() {
-  const router = useRouter();
+  const { query } = useRouter();
+  const isMounted = useIsMounted();
 
-  const { id } = router.query;
+  const { socket } = useSocket();
 
-  const { data: room } = useFetch<Room>(`/rooms/${id}`);
-  const { data: messages, revalidate } = useFetch<Message[]>(`/rooms/${id}/messages`);
+  const { data: room } = useFetch<Room>(`/rooms/${query.id}`);
 
-  if (!room || !messages) return <div>Loading...</div>;
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    socket.emit('joinRoom', Number(query.id));
+
+    if (isMounted) {
+      socket.on('messages', (data: Message[]) => {
+        setMessages(data);
+      });
+    }
+
+    return () => {
+      socket.emit('leaveRoom', Number(query.id));
+    };
+  }, [isMounted]);
+
+  useEffect(() => {
+    socket.off('newMessage').on('newMessage', (data: Message) => {
+      setMessages([...messages, data]);
+    });
+  }, [messages]);
+
+  if (!room) return <div>Loading...</div>;
 
   return (
     <main className="flex flex-col h-full">
@@ -47,7 +72,7 @@ export default function RoomPage() {
 
       <MessageBox messages={messages} />
 
-      <SendMessageInput roomId={Number(id)} onSend={revalidate} />
+      <SendMessageInput roomId={Number(query.id)} />
     </main>
   );
 }
