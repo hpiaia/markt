@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { StooqService } from 'src/stooq/stooq.service';
 
 @Injectable()
 export class CommandsService {
-  sum(...args: string[]): string {
-    const total = (args.map(Number) || []).reduce((a, b) => a + b);
+  constructor(private readonly stooqService: StooqService) {}
 
-    return `Your sum is: ${total}`;
+  stock(stockId: string) {
+    return this.stooqService.getStock(stockId);
   }
 }
