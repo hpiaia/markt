@@ -8,26 +8,34 @@ export class MessagesService {
   constructor(private readonly prisma: PrismaService) {}
 
   /**
-   * Returns first 50 messages from the room with a given id.
+   * Returns first messages from the room with a given id.
    */
-  async fromRoom(roomId: number): Promise<Message[]> {
-    return this.prisma.message.findMany({
-      where: {
-        roomId,
-      },
-      take: 50,
-      orderBy: {
-        createdAt: 'asc',
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true,
+  async fromRoom({
+    roomId,
+    take,
+  }: {
+    roomId: number;
+    take: number;
+  }): Promise<Message[]> {
+    return (
+      await this.prisma.message.findMany({
+        where: {
+          roomId,
+        },
+        take,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
           },
         },
-      },
-    });
+      })
+    ).reverse();
   }
 
   /**
@@ -36,6 +44,14 @@ export class MessagesService {
   async create(data: Prisma.MessageCreateInput): Promise<Message> {
     return this.prisma.message.create({
       data,
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
   }
 }

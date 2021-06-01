@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ChatModule } from 'src/chat/chat.module';
 
 import { AuthModule } from '../auth/auth.module';
-import { MessagesModule } from '../messages/messages.module';
 import { RoomsModule } from '../rooms/rooms.module';
 import { UsersModule } from '../users/users.module';
 import { AppController } from './app.controller';
@@ -15,7 +15,7 @@ import { AppController } from './app.controller';
     AuthModule,
     UsersModule,
     RoomsModule,
-    MessagesModule,
+    ChatModule,
   ],
   controllers: [AppController],
 })

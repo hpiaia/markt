@@ -1,9 +1,9 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app/app.module';
-import { ChatModule } from './chat/chat.module';
+import { SocketIoAdapter } from './app/socket-io.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,24 +11,20 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 
-  const chatModule = await NestFactory.createMicroservice<MicroserviceOptions>(
-    ChatModule,
-    {
-      transport: Transport.RMQ,
-      options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'chat_queue',
-        queueOptions: {
-          durable: false,
-        },
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URL],
+      queue: 'chat_queue',
+      queueOptions: {
+        durable: false,
       },
     },
-  );
+  });
 
-  const logger = new Logger('NestFactory');
+  app.useWebSocketAdapter(new SocketIoAdapter(app, true));
 
-  chatModule.listen(() => logger.log('Microservice is listening'));
-
+  await app.startAllMicroservicesAsync();
   await app.listen(3001);
 }
 
