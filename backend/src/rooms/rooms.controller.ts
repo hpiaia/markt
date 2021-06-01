@@ -11,15 +11,15 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { JwtGuard } from 'src/auth/jwt.guard';
-import { User } from 'src/auth/user.decorator';
 
+import { JwtGuard } from '../auth/jwt.guard';
+import { User } from '../auth/user.decorator';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { RoomsService } from './rooms.service';
 
-@Controller('rooms')
 @UseGuards(JwtGuard)
+@Controller('rooms')
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) {}
 
@@ -36,7 +36,7 @@ export class RoomsController {
    */
   @Get('/:id')
   async show(@Param('id', ParseIntPipe) id: number) {
-    const room = await this.roomsService.find({ id });
+    const room = await this.roomsService.findOne({ id });
 
     if (!room) {
       throw new BadRequestException('there is no room with this id');
@@ -65,7 +65,7 @@ export class RoomsController {
     @Body() updateRoomDto: UpdateRoomDto,
     @User() userId: number,
   ) {
-    const room = await this.roomsService.find({ id });
+    const room = await this.roomsService.findOne({ id });
 
     if (!room) {
       throw new BadRequestException('there is no room with this id');
@@ -83,7 +83,7 @@ export class RoomsController {
    */
   @Delete('/:id')
   async delete(@Param('id', ParseIntPipe) id: number, @User() userId: number) {
-    const room = await this.roomsService.find({ id });
+    const room = await this.roomsService.findOne({ id });
 
     if (!room) {
       throw new BadRequestException('there is no room with this id');
