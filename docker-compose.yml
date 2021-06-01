@@ -11,8 +11,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: docker
-  backend:
-    build: ./backend/
+  api:
+    build: ./api/
     networks:
       - markt
     ports:
