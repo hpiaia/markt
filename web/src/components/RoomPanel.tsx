@@ -2,11 +2,12 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  FC, Fragment, useEffect, useState,
+  FC, Fragment, useCallback, useEffect, useState,
 } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
+import { useIsMounted } from '../hooks/useIsMounted';
 import api from '../lib/api';
 import { ErrorMessagesAlert } from './ErrorMessagesAlert';
 import { InputBlock } from './InputBlock';
@@ -37,12 +38,14 @@ export const RoomPanel: FC<Props> = ({
   onClose,
   onSubmitSuccess,
 }) => {
+  const isMounted = useIsMounted();
+
   const form = useForm<FormValues>({ resolver: yupResolver(formSchema) });
   const [errorMessages, setErrorMessages] = useState([]);
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<FormValues> = useCallback(async (data) => {
     try {
-      const { name } = await api.post<CreateRoomResponse>('/rooms', data)
+      await api.post<CreateRoomResponse>('/rooms', data)
         .then((response) => response.data);
 
       onClose();
@@ -50,15 +53,18 @@ export const RoomPanel: FC<Props> = ({
     } catch (e) {
       setErrorMessages(e.response?.data?.message || []);
     }
-  };
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
+      if (!isMounted) return;
+
       form.clearErrors();
       form.reset();
+
       setErrorMessages([]);
     }, 1000);
-  }, [isOpen]);
+  }, [isOpen, isMounted]);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -108,54 +114,7 @@ export const RoomPanel: FC<Props> = ({
                             <ErrorMessagesAlert messages={errorMessages} />
 
                             <InputBlock labelText="Name" type="text" name="name" />
-                            <InputBlock labelText="Description" type="text" name="description" />
-
-                            <fieldset>
-                              <legend className="text-sm font-medium text-gray-900">Privacy</legend>
-                              <div className="mt-2 space-y-5">
-                                <div className="relative flex items-start">
-                                  <div className="absolute flex items-center h-5">
-                                    <input
-                                      id="privacy_public"
-                                      name="privacy"
-                                      aria-describedby="privacy_public_description"
-                                      type="radio"
-                                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                      defaultChecked
-                                    />
-                                  </div>
-                                  <div className="pl-7 text-sm">
-                                    <label htmlFor="privacy_public" className="font-medium text-gray-900">
-                                      Public
-                                    </label>
-                                    <p id="privacy_public_description" className="text-gray-500">
-                                      Everyone will be able to see this room
-                                    </p>
-                                  </div>
-                                </div>
-                                <div>
-                                  <div className="relative flex items-start">
-                                    <div className="absolute flex items-center h-5">
-                                      <input
-                                        id="privacy_private-to-project"
-                                        name="privacy"
-                                        aria-describedby="privacy_private-to-project_description"
-                                        type="radio"
-                                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                      />
-                                    </div>
-                                    <div className="pl-7 text-sm">
-                                      <label htmlFor="privacy_private-to-project" className="font-medium text-gray-900">
-                                        Private
-                                      </label>
-                                      <p id="privacy_private-to-project_description" className="text-gray-500">
-                                        Only people you invite can see this room
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </fieldset>
+                            <InputBlock labelText="Description" type="text" name="description" multipleLines />
                           </div>
                         </div>
                       </div>

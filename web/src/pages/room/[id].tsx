@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Gravatar from 'react-gravatar';
 
+import { LoadingScreen } from '../../components/LoadingScreen';
 import { MessageBox } from '../../components/MessageBox';
 import { SendMessageInput } from '../../components/SendMessageInput';
 import { useFetch } from '../../hooks/useFetch';
@@ -41,7 +42,7 @@ export default function RoomPage() {
     });
   }, [messages]);
 
-  if (!room) return <div>Loading...</div>;
+  if (!room) return <LoadingScreen />;
 
   return (
     <main className="flex flex-col h-full">

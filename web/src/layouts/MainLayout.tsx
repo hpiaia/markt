@@ -15,7 +15,6 @@ import {
 } from 'react';
 import Gravatar from 'react-gravatar';
 
-import { CategoriesSidebar } from '../components/CategoriesSidebar';
 import { LoadingScreen } from '../components/LoadingScreen';
 import { SocketProvider } from '../contexts/SocketContext';
 import { useAuth } from '../hooks/useAuth';
@@ -101,7 +100,7 @@ export default function MainLayout({ children }: LayoutProps) {
                     alt="Markt"
                   />
                   <h1 className="ml-4 text-2xl font-extrabold text-gray-700">
-                    Markt<span className="text-indigo-600">.</span>Chat
+                    Markt<span className="text-indigo-600">.</span>
                   </h1>
                 </div>
                 <div className="mt-5 flex-1 h-0 overflow-y-auto">
@@ -128,24 +127,11 @@ export default function MainLayout({ children }: LayoutProps) {
                           Home
                         </a>
                       </Link>
-                      <Link href="/profile">
-                        <a className={router.asPath === '/profile' ? 'bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base leading-5 font-medium rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-base leading-5 font-medium rounded-md'}>
-                          <UserIcon className={router.asPath === '/profile' ? 'text-gray-500 mr-3 flex-shrink-0 h-6 w-6' : 'text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6'} />
-                          Profile
-                        </a>
-                      </Link>
-                      <Link href="/settings">
-                        <a className={router.asPath === '/settings' ? 'bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base leading-5 font-medium rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-base leading-5 font-medium rounded-md'}>
-                          <CogIcon className={router.asPath === '/settings' ? 'text-gray-500 mr-3 flex-shrink-0 h-6 w-6' : 'text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6'} />
-                          Settings
-                        </a>
-                      </Link>
                       <a href="#" onClick={handleSignOut} className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-base leading-5 font-medium rounded-md">
                         <LogoutIcon className="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6" />
                         Sign Out
                       </a>
                     </div>
-                    <CategoriesSidebar />
                   </nav>
                 </div>
               </div>
@@ -162,7 +148,7 @@ export default function MainLayout({ children }: LayoutProps) {
                 alt="Markt"
               />
               <h1 className="ml-4 text-2xl font-extrabold text-gray-700">
-                Markt<span className="text-indigo-600">.</span>Chat
+                Markt<span className="text-indigo-600">.</span>
               </h1>
             </div>
             <div className="h-0 flex-1 flex flex-col overflow-y-auto">
@@ -209,24 +195,11 @@ export default function MainLayout({ children }: LayoutProps) {
                       Home
                     </a>
                   </Link>
-                  <Link href="/profile">
-                    <a className={router.asPath === '/profile' ? 'bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md'}>
-                      <UserIcon className={router.asPath === '/profile' ? 'text-gray-500 mr-3 flex-shrink-0 h-6 w-6' : 'text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6'} />
-                      Profile
-                    </a>
-                  </Link>
-                  <Link href="/settings">
-                    <a className={router.asPath === '/settings' ? 'bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md'}>
-                      <CogIcon className={router.asPath === '/settings' ? 'text-gray-500 mr-3 flex-shrink-0 h-6 w-6' : 'text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6'} />
-                      Settings
-                    </a>
-                  </Link>
                   <a href="#" onClick={handleSignOut} className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
                     <LogoutIcon className="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6" />
                     Sign Out
                   </a>
                 </div>
-                <CategoriesSidebar />
               </nav>
             </div>
           </div>

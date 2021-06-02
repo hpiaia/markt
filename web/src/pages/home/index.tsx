@@ -2,8 +2,12 @@ import { useState } from 'react';
 
 import { RoomPanel } from '../../components/RoomPanel';
 import { RoomsTable } from '../../components/RoomsTable';
+import { useFetch } from '../../hooks/useFetch';
+import { Room } from '../../types/Room';
 
 export default function HomePage() {
+  const { data } = useFetch<Room[]>('/rooms');
+
   const [createPanelOpen, setCreatePanelOpen] = useState(false);
 
   return (
@@ -26,36 +30,16 @@ export default function HomePage() {
       </div>
 
       <div className="px-4 mt-6 sm:px-6 lg:px-8">
-        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">
-          Categories
+        <h2 className="text-xl font-medium leading-tight text-gray-800">
+          All rooms
         </h2>
-        <ul className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4 mt-3">
-
-          <a href="/">
-            <li className="relative col-span-1 flex shadow-sm rounded-md">
-              <div className="bg-pink-600 flex-shrink-0 flex items-center justify-center w-16 text-white text-2xl rounded-l-md">
-                ST
-              </div>
-              <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                <div className="flex-1 px-4 py-2 text-sm truncate">
-                  <span className="text-gray-900 font-medium hover:text-gray-600">
-                    Stocks
-                  </span>
-                  <p className="text-gray-500">20 Rooms</p>
-                </div>
-              </div>
-            </li>
-          </a>
-
-        </ul>
       </div>
 
-      <RoomsTable />
+      <div className="mt-6">
+        <RoomsTable rooms={data || []} />
+      </div>
 
-      {/* <RoomPanel
-        isOpen={createPanelOpen}
-        onClose={() => setCreatePanelOpen(false)}
-      /> */}
+      <RoomPanel isOpen={createPanelOpen} onClose={() => setCreatePanelOpen(false)} />
     </main>
   );
 }
