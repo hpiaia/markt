@@ -10,7 +10,7 @@ import { CommandsService } from './commands.service';
         name: 'COMMANDS_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          urls: [process.env.RABBITMQ_URL],
           queue: 'commands_queue',
           queueOptions: {
             durable: false,
