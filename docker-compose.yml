@@ -1,29 +1,14 @@
 version: "3.9"
-networks:
-  markt:
-    driver: bridge
 services:
   postgres:
     image: postgres
-    networks:
-      - markt
     ports:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: docker
-  api:
-    build: ./api/
-    networks:
-      - markt
+  rabbit:
+    image: rabbitmq:3-management
     ports:
-      - 3001:3001
-    environment:
-      APP_SECRET: markt123
-      DATABASE_URL: postgresql://postgres:docker@postgres:5432/markt?schema=public
-      RABBITMQ_URL: amqps://jymjrwnm:nZHCIISyFxU2qFOObJBRMqdFy18Vs1E-@beaver.rmq.cloudamqp.com/jymjrwnm
-  bot:
-    build: ./bot/
-    networks:
-      - markt
-    environment:
-      RABBITMQ_URL: amqps://jymjrwnm:nZHCIISyFxU2qFOObJBRMqdFy18Vs1E-@beaver.rmq.cloudamqp.com/jymjrwnm
+      - 5672:5672
+      - 15672:15672
+
