@@ -1,25 +1,29 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 import { ChatService } from './chat.service';
 
 @Module({
-  imports: [
-    ClientsModule.register([
-      {
-        name: 'CHAT_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.RABBITMQ_URL],
-          queue: 'chat_queue',
-          queueOptions: {
-            durable: false,
+  providers: [
+    {
+      provide: 'CHAT_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        return ClientProxyFactory.create({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get('RABBITMQ_URL')],
+            queue: 'chat_queue',
+            queueOptions: {
+              durable: false,
+            },
           },
-        },
+        });
       },
-    ]),
+      inject: [ConfigService],
+    },
+    ChatService,
   ],
-  providers: [ChatService],
   exports: [ChatService],
 })
 export class ChatModule {}

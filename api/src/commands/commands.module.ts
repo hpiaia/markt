@@ -1,25 +1,29 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 import { CommandsService } from './commands.service';
 
 @Module({
-  imports: [
-    ClientsModule.register([
-      {
-        name: 'COMMANDS_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.RABBITMQ_URL],
-          queue: 'commands_queue',
-          queueOptions: {
-            durable: false,
+  providers: [
+    {
+      provide: 'COMMANDS_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        return ClientProxyFactory.create({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get('RABBITMQ_URL')],
+            queue: 'commands_queue',
+            queueOptions: {
+              durable: false,
+            },
           },
-        },
+        });
       },
-    ]),
+      inject: [ConfigService],
+    },
+    CommandsService,
   ],
-  providers: [CommandsService],
   exports: [CommandsService],
 })
 export class CommandsModule {}
