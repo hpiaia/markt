@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Gravatar from 'react-gravatar';
 
 import { LoadingScreen } from '../../components/LoadingScreen';
 import { MessageBox } from '../../components/MessageBox';
