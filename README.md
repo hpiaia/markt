@@ -2,7 +2,9 @@
 
 This project was developed with the intention of being a code test for Jobsity, you can find more about the challenge at the original PDF file that was sent to me [here](https://github.com/hpiaia/markt/blob/main/challenge.pdf). 
 
-The project is live and published on DigitalOcean and Vercel and can be tested at this link.
+The challenge consists of a simple browser-based chat application using NodeJS where several users can talk and send commands to the application to get stock quotes.
+
+The project is live and published on DigitalOcean and Vercel and can be tested at the link below.
 
 [markt.hpiaia.dev](https://markt.hpiaia.dev/)
 
@@ -24,9 +26,7 @@ The project is live and published on DigitalOcean and Vercel and can be tested a
 
 ## Architecture <a name="architecture"/> 
 
-The challenge consists of a simple browser-based chat application using NodeJS where several users can talk and send commands to the application to get stock quotes.
-
-To achieve that, as the challenge itself suggested, the application was separated into three services:
+As the challenge itself suggested, the application was separated into three services:
 
  - **API**: This service is responsible for handling all the incoming HTTP requests from the user. (authentication, list rooms, create rooms, etc) and also has a WebSocket endpoint that handles the chat business-logic (join into a room, send a message, retrieve messages, etc).
  - **BOT**: This service is responsible for handling commands that are send for the application via chat. It runs asynchronously and communicates with the API service via RabbitMQ. 
