@@ -84,7 +84,7 @@ Lastly, do the same thing with the `.env.example` file in the `/web` folder.
 
 ### Setup the Database <a name="setup-database"/>
 
-After your environment variables are all correct, you need to run the prisma migration for the database creation. To do that, simply this command on the API folder.
+After your environment variables are all correct, you need to run the prisma migration for the database creation. To do that, simply run this command on the api folder.
 
 ```bash
 npx prisma migrate dev
