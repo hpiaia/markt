@@ -15,7 +15,7 @@ To achieve that, as the challenge itself suggested, the application was separate
  - **BOT**: This service is responsible for handling commands that are send for the application via chat. It runs asynchronously and communicates with the API service via RabbitMQ. 
  - **WEB**: This is the frontend application that runs on the users browser, it contemplates the user interface and communicates with the API service via HTTP or WebSocket requests.
 
-Below is a diagram of the entire architecture and communication between the services: 
+Below is a diagram of the architecture and communication between the services: 
 
 ![communication diagram](https://raw.githubusercontent.com/hpiaia/markt/main/diagram.png)
 
@@ -69,17 +69,17 @@ If you use docker compose, everything should work out of the box and you don't n
 
 First, duplicate the `.env.example` to a file called `.env` in the `/api` folder, then edit the variables to point to your services.
 
- - **PORT** - The port that the API service will run;
- - **APP_SECRET** - The encription key for the authentication tokens;
- - **DATABASE_URL** - The Postgres connection string;
- - **RABBITMQ_URL** - The RabbitMQ connection string;
+ - **PORT** - The port that the API service will run
+ - **APP_SECRET** - The encription key for the authentication tokens
+ - **DATABASE_URL** - The Postgres connection string
+ - **RABBITMQ_URL** - The RabbitMQ connection string
 
 Then, do the same thing with the `.env.example` file in the `/bot` folder.
 
- - **RABBITMQ_URL** - The RabbitMQ connection string, make sure it is the same as the API uses;
+ - **RABBITMQ_URL** - The RabbitMQ connection string, make sure it is the same as the API uses
 
 Lastly, do the same thing with the `.env.example` file in the `/web` folder.
 
- - **NEXT_PUBLIC_API_URL** - The full url of the API endpoint;
+ - **NEXT_PUBLIC_API_URL** - The full url of the API endpoint
  
  
