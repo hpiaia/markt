@@ -6,7 +6,17 @@ The project is live and published on DigitalOcean and Vercel and can be tested a
 
 [markt.hpiaia.dev](https://markt.hpiaia.dev/)
 
-## Architecture
+## Table of Contents 
+- [Architecture](#architecture)
+- [Technologies](#technologies)
+- [Running the project locally](#run-locally)
+  - [Run with Docker Compose](#run-with-docker)
+  - [Run without Docker](#run-without-docker)
+  - [Setup the Database](#setup-database)
+  - [Environment Variables](#environment-variables)
+
+## Architecture <a name="architecture"/> 
+
 The challenge consists of a simple browser-based chat application using NodeJS where several users can talk and send commands to the application to get stock quotes.
 
 To achieve that, as the challenge itself suggested, the application was separated into three services:
@@ -19,7 +29,8 @@ Below is a diagram of the architecture and communication between the services:
 
 ![communication diagram](https://raw.githubusercontent.com/hpiaia/markt/main/diagram.png)
 
-## Technologies
+## Technologies <a name="technologies"/>
+
 This section describes every technology used in the project, divided by application.
 
  - **API**
@@ -42,9 +53,9 @@ This section describes every technology used in the project, divided by applicat
 	 - TailwindCSS
 	 - SocketIO
 
-## Running the project locally
+## Running the project locally <a name="run-locally"/>
 
-### Run with Docker Compose
+### Run with Docker Compose <a name="run-with-docker"/>
 
 All the applications are dockerized, you can run everything with a simple docker compose command.
 
@@ -52,7 +63,7 @@ All the applications are dockerized, you can run everything with a simple docker
 docker compose up
 ```
 
-### Run without Docker
+### Run without Docker <a name="run-without-docker"/>
 
 If you want, you can run the applications with NodeJS and without docker, but first you need to make sure you have the RabbitMQ and Postgres services up and running.
 
@@ -63,7 +74,11 @@ cd /bot && npm run start:dev
 cd /web && npm run dev
 ```
 
-### Environment variables
+### Setup the Database <a name="setup-database"/>
+
+If you are not using docker compose, you need to run the prisma migration for the database creation. You can find more about it at the official Prisma documentation, following [this link](https://www.prisma.io/docs/concepts/components/prisma-migrate).
+
+### Environment Variables <a name="environment-variables"/>
 
 If you use docker compose, everything should work out of the box and you don't need to worry about this section, but if you are running without docker, make sure you set up the environment files following this guide.
 
