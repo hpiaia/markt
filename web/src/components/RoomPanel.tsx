@@ -5,6 +5,7 @@ import {
   FC, Fragment, useCallback, useEffect, useState,
 } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
 import { useIsMounted } from '../hooks/useIsMounted';
@@ -49,6 +50,9 @@ export const RoomPanel: FC<Props> = ({
         .then((response) => response.data);
 
       onClose();
+
+      toast('Your room was created!', { position: 'bottom-right' });
+
       if (onSubmitSuccess) onSubmitSuccess();
     } catch (e) {
       setErrorMessages(e.response?.data?.message || []);

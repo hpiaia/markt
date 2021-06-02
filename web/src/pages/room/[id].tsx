@@ -14,7 +14,6 @@ import { Room } from '../../types/Room';
 
 export default function RoomPage() {
   const { query } = useRouter();
-  const isMounted = useIsMounted();
 
   const { socket } = useSocket();
 
@@ -22,14 +21,16 @@ export default function RoomPage() {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const isMounted = useIsMounted();
+
   useEffect(() => {
+    if (!isMounted) return () => {};
+
     socket.emit('joinRoom', Number(query.id));
 
-    if (isMounted) {
-      socket.on('messages', (data: Message[]) => {
-        setMessages(data);
-      });
-    }
+    socket.on('messages', (data: Message[]) => {
+      setMessages(data);
+    });
 
     return () => {
       socket.emit('leaveRoom', Number(query.id));
@@ -37,9 +38,11 @@ export default function RoomPage() {
   }, [isMounted]);
 
   useEffect(() => {
-    socket.off('newMessage').on('newMessage', (data: Message) => {
-      setMessages([...messages, data]);
-    });
+    socket
+      .off('newMessage')
+      .on('newMessage', (data: Message) => {
+        setMessages([...messages, data]);
+      });
   }, [messages]);
 
   if (!room) return <LoadingScreen />;
@@ -53,20 +56,6 @@ export default function RoomPage() {
           </h1>
           <div className="flex items-center text-sm text-gray-500">
             {room.description}
-          </div>
-        </div>
-        <div className="flex hidden md:block">
-          <div className="flex items-center space-x-2">
-            <div className="flex flex-shrink-0 -space-x-3">
-              <Gravatar
-                email={room.owner.email}
-                className="max-w-none h-10 w-10 rounded-full ring-4 ring-white"
-                title={room.owner.name}
-              />
-            </div>
-            <span className="flex-shrink-0 leading-5 font-medium">
-              +1
-            </span>
           </div>
         </div>
       </div>

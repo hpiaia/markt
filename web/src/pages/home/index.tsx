@@ -1,14 +1,17 @@
 import { useState } from 'react';
 
+import { LoadingScreen } from '../../components/LoadingScreen';
 import { RoomPanel } from '../../components/RoomPanel';
 import { RoomsTable } from '../../components/RoomsTable';
 import { useFetch } from '../../hooks/useFetch';
 import { Room } from '../../types/Room';
 
 export default function HomePage() {
-  const { data } = useFetch<Room[]>('/rooms');
+  const { data, revalidate } = useFetch<Room[]>('/rooms');
 
   const [createPanelOpen, setCreatePanelOpen] = useState(false);
+
+  if (!data) return <LoadingScreen />;
 
   return (
     <main>
@@ -36,10 +39,14 @@ export default function HomePage() {
       </div>
 
       <div className="mt-6">
-        <RoomsTable rooms={data || []} />
+        <RoomsTable rooms={data || []} onCreateClick={() => setCreatePanelOpen(true)} />
       </div>
 
-      <RoomPanel isOpen={createPanelOpen} onClose={() => setCreatePanelOpen(false)} />
+      <RoomPanel
+        isOpen={createPanelOpen}
+        onClose={() => setCreatePanelOpen(false)}
+        onSubmitSuccess={revalidate}
+      />
     </main>
   );
 }

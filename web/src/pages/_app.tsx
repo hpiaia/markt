@@ -1,10 +1,11 @@
 import 'tailwindcss/tailwind.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import type { AppProps } from 'next/app';
-import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import { Head } from '../components/Head';
 import { LoadingScreen } from '../components/LoadingScreen';
@@ -34,6 +35,7 @@ function App({ Component, pageProps, router }: AppProps) {
       <Layout>
         <Head />
         <Component {...pageProps} />
+        <ToastContainer />
       </Layout>
     </AuthProvider>
   );
