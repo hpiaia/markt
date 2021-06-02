@@ -1,3 +1,4 @@
+
 # Markt - Jobsity's coding test
 
 This project was developed with the intention of being a code test for Jobsity, you can find more about the challenge at the original PDF file that was sent to me [here](https://github.com/hpiaia/markt/blob/main/challenge.pdf). 
@@ -10,10 +11,9 @@ The project is live and published on DigitalOcean and Vercel and can be tested a
 - [Architecture](#architecture)
 - [Technologies](#technologies)
 - [Running the project locally](#run-locally)
-  - [Run with Docker Compose](#run-with-docker)
-  - [Run without Docker](#run-without-docker)
   - [Setup the Database](#setup-database)
   - [Environment Variables](#environment-variables)
+  - [Running the applications](#running-applications)
 
 ## Architecture <a name="architecture"/> 
 
@@ -55,32 +55,16 @@ This section describes every technology used in the project, divided by applicat
 
 ## Running the project locally <a name="run-locally"/>
 
-### Run with Docker Compose <a name="run-with-docker"/>
-
-All the applications are dockerized, you can run everything with a simple docker compose command.
-
-```bash
-docker compose up
-```
-
-### Run without Docker <a name="run-without-docker"/>
-
-If you want, you can run the applications with NodeJS and without docker, but first you need to make sure you have the RabbitMQ and Postgres services up and running.
-
-To run the applications with Node, run the following commands in different terminal windows.
-```bash
-cd /api && npm run start:dev
-cd /bot && npm run start:dev
-cd /web && npm run dev
-```
-
-### Setup the Database <a name="setup-database"/>
-
-If you are not using docker compose, you need to run the prisma migration for the database creation. You can find more about it at the official Prisma documentation, following [this link](https://www.prisma.io/docs/concepts/components/prisma-migrate).
-
 ### Environment Variables <a name="environment-variables"/>
 
-If you use docker compose, everything should work out of the box and you don't need to worry about this section, but if you are running without docker, make sure you set up the environment files following this guide.
+First of all, we need to setup our environment variables, so the applications can communicate correctly with the Postgres and the RabbitMQ services.
+
+You will need both of this services running somewhere, if you want to run them locally in your machine, you can easily do it with docker using the following commands.
+
+```bash
+docker run --name markt-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+docker run --name markt-rabbit --hostname markt-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+```
 
 First, duplicate the `.env.example` to a file called `.env` in the `/api` folder, then edit the variables to point to your services.
 
@@ -97,4 +81,19 @@ Lastly, do the same thing with the `.env.example` file in the `/web` folder.
 
  - **NEXT_PUBLIC_API_URL** - The full url of the API endpoint
  
- 
+
+### Setup the Database <a name="setup-database"/>
+
+If you are not using docker compose, you need to run the prisma migration for the database creation. You can find more about it at the official Prisma documentation, following [this link](https://www.prisma.io/docs/concepts/components/prisma-migrate).
+
+### Running applications <a name="running-applications"/>
+
+If you want, you can run the applications with NodeJS and without docker, but first you need to make sure you have the RabbitMQ and Postgres services up and running.
+
+To run the applications with Node, run the following commands in different terminal windows.
+```bash
+cd /api && npm run start:dev
+cd /bot && npm run start:dev
+cd /web && npm run dev
+```
+
