@@ -84,7 +84,13 @@ Lastly, do the same thing with the `.env.example` file in the `/web` folder.
 
 ### Setup the Database <a name="setup-database"/>
 
-If you are not using docker compose, you need to run the prisma migration for the database creation. You can find more about it at the official Prisma documentation, following [this link](https://www.prisma.io/docs/concepts/components/prisma-migrate).
+After your environment variables are all correct, you need to run the prisma migration for the database creation. To do that, simply this command on the API folder.
+
+```bash
+npx prisma migrate dev
+````
+
+You can find more about it at the official Prisma documentation, following [this link](https://www.prisma.io/docs/concepts/components/prisma-migrate).
 
 ### Running applications <a name="running-applications"/>
 
