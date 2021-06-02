@@ -10,7 +10,7 @@ import { ChatService } from './chat.service';
         name: 'CHAT_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          urls: [process.env.RABBITMQ_URL],
           queue: 'chat_queue',
           queueOptions: {
             durable: false,
