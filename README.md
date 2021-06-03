@@ -18,13 +18,13 @@ The project is live and published on DigitalOcean and Vercel and can be tested a
 	 - [Database migration](#database-migration)
 	 - [Running the applications](#running-the-applications)
 
-## Features <a name="features"/> 
+## Features <a name="features"></a>
 
  - Multi room  — users can create rooms at the home page
  - Real time — messages arrive in no time
  - Easy to implement new commands — just implement a new method in [the service](https://github.com/hpiaia/markt/blob/main/bot/src/commands/commands.service.ts) with the command name and the application will take care of the rest
 
-## Architecture <a name="architecture"/> 
+## Architecture <a name="architecture"></a> 
 
 As the challenge itself suggested, the application was separated into three services:
 
@@ -36,7 +36,7 @@ Below is a diagram of the architecture and communication between the services:
 
 ![communication diagram](https://raw.githubusercontent.com/hpiaia/markt/main/diagram.png)
 
-## Technologies <a name="technologies"/>
+## Technologies <a name="technologies"></a>
 
 This section describes every technology used in the project, divided by application.
 
@@ -44,8 +44,7 @@ This section describes every technology used in the project, divided by applicat
 	 - Typescript
 	 - NestJS
 	 - Prisma ORM
-	 - PassportJS
-	 - JWT
+	 - PassportJS with JWT
 	 - RabbitMQ
 	 - SocketIO
 	 - Postgres
@@ -60,9 +59,9 @@ This section describes every technology used in the project, divided by applicat
 	 - TailwindCSS
 	 - SocketIO
 
-## Running the project locally <a name="run-locally"/>
+## Running the project locally <a name="run-locally"></a>
 
-### Environment variables <a name="environment-variables"/>
+### Environment variables <a name="environment-variables"></a>
 
 First of all, we need to setup our environment variables, so the applications can communicate correctly with the Postgres and the RabbitMQ services.
 
@@ -89,25 +88,26 @@ Lastly, do the same thing with the `.env.example` file in the `/web` folder.
  - **NEXT_PUBLIC_API_URL** - The full url of the API endpoint
  
 
-### Database migration <a name="database-migration"/>
+### Database migration <a name="database-migration"></a>
 
 After your environment variables are all correct, you need to run the prisma migration for the database creation. To do that, simply run this command on the api folder.
 
 ```bash
-npx prisma migrate dev
-````
+cd /api && npx prisma migrate dev
+```
 
 You can find more about it at the official Prisma documentation, following [this link](https://www.prisma.io/docs/concepts/components/prisma-migrate).
 
-### Running the applications <a name="running-the-applications"/>
+### Running the applications <a name="running-the-applications"></a>
 
 If you want, you can run the applications with NodeJS and without docker, but first you need to make sure you have the RabbitMQ and Postgres services up and running.
 
 To run the applications with Node, run the following commands in different terminal windows.
+
 ```bash
-cd /api && npm run start:dev
-cd /bot && npm run start:dev
-cd /web && npm run dev
+cd /api && npm install && npm run start:dev
+cd /bot && npm install && npm run start:dev
+cd /web && npm install && npm run dev
 ```
 
 ## Thanks
