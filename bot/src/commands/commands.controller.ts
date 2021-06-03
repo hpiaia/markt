@@ -51,6 +51,7 @@ export class CommandsController {
   private parseCommandText(command: string) {
     return command
       .substring(1)
+      .replace(/=/g, ' ')
       .split(' ')
       .filter((item) => item !== '');
   }
